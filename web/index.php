@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+require __DIR__ . '/../config/env.php';
+
+$appEnvironment = app_env('APP_ENV', 'prod');
+defined('YII_ENV') or define('YII_ENV', $appEnvironment);
+defined('YII_DEBUG') or define('YII_DEBUG', $appEnvironment === 'dev' && app_bool('APP_DEBUG', false));
+
+require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
+
+$config = require __DIR__ . '/../config/web.php';
+
+(new yii\web\Application($config))->run();

@@ -1,0 +1,37 @@
+{
+  "items": [
+    {
+      "query": "website builder",
+      "impressions": 4200,
+      "language": "en",
+      "landing_page": "https://site.pro/"
+    },
+    {
+      "query": "website builder for restaurants",
+      "impressions": 320,
+      "language": "en_US"
+    },
+    {
+      "keyword": "website builder app",
+      "search_volume": "510",
+      "language": "English",
+      "url": "https://site.pro/"
+    },
+    {
+      "keyword": "website builder no code",
+      "volume": 700,
+      "lang": "en"
+    },
+    {
+      "keyword": "website builder test",
+      "volume": 30,
+      "locale": "en",
+      "target_url": "https://site.pro/"
+    },
+    {
+      "keyword": "ki website baukasten",
+      "volume": 260,
+      "language": "de"
+    }
+  ]
+}

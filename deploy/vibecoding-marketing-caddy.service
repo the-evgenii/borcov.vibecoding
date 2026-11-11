@@ -1,0 +1,26 @@
+[Unit]
+Description=Vibecoding Marketing isolated Caddy on 8443
+After=network.target
+
+[Service]
+Type=simple
+User=vibecoding
+Group=vibecoding
+Environment=HOME=/opt/vibecoding-marketing
+Environment=XDG_DATA_HOME=/opt/vibecoding-marketing/caddy/data
+Environment=XDG_CONFIG_HOME=/opt/vibecoding-marketing/caddy/config
+WorkingDirectory=/opt/vibecoding-marketing/caddy
+ExecStart=/usr/bin/caddy run --config /opt/vibecoding-marketing/caddy/Caddyfile --adapter caddyfile
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=20
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/vibecoding-marketing
+LimitNOFILE=4096
+MemoryHigh=150M
+
+[Install]
+WantedBy=multi-user.target

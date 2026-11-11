@@ -1,0 +1,33 @@
+parameters:
+    level: 5
+
+    paths:
+        - assets
+        - commands
+        - config
+        - controllers
+        - mail
+        - models
+        - services
+        - tests/Integration
+        - tests/Support
+        - tests/Unit
+
+    scanDirectories:
+        - tests/Support
+
+    scanFiles:
+        - vendor/yiisoft/yii2/BaseYii.php
+        - vendor/yiisoft/yii2/Yii.php
+
+    bootstrapFiles:
+        - tests/phpstan-bootstrap.php
+
+    dynamicConstantNames:
+        - YII_DEBUG
+        - YII_ENV
+        - YII_ENV_DEV
+        - YII_ENV_PROD
+        - YII_ENV_TEST
+
+    tmpDir: %currentWorkingDirectory%/runtime

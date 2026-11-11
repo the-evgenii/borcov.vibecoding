@@ -1,0 +1,25 @@
+[Unit]
+Description=Vibecoding Marketing isolated PHP-FPM
+After=network.target
+
+[Service]
+Type=simple
+User=vibecoding
+Group=vibecoding
+Environment=HOME=/opt/vibecoding-marketing
+WorkingDirectory=/opt/vibecoding-marketing/app
+ExecStartPre=/usr/sbin/php-fpm8.5 --test --fpm-config=/opt/vibecoding-marketing/php-fpm.conf
+ExecStart=/usr/sbin/php-fpm8.5 --nodaemonize --fpm-config=/opt/vibecoding-marketing/php-fpm.conf
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=20
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/vibecoding-marketing
+LimitNOFILE=2048
+MemoryHigh=300M
+
+[Install]
+WantedBy=multi-user.target

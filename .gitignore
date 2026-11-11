@@ -1,0 +1,52 @@
+# Local environment and secrets
+/.env
+/.env.local
+/.env.*.local
+!/.env.example
+
+# Deployment secrets and local TLS material
+/deploy/credentials.txt
+/deploy/*.crt
+/deploy/*.key
+/deploy/*.pem
+/deploy/*fingerprint*
+/deploy/tls-fingerprints.txt
+
+# Composer
+/vendor
+/composer.phar
+/auth.json
+
+# Runtime data, logs, SQLite database
+/runtime/*
+!/runtime/.gitignore
+/web/assets/*
+!/web/assets/.gitignore
+
+# PHPUnit / test output
+/tests/_output/*
+/tests/_support/_generated
+/runtime/tests/*
+.phpunit.result.cache
+/coverage
+/coverage.xml
+/c3.php
+
+# Local databases and logs
+*.sqlite
+*.sqlite3
+*.db
+*.log
+
+# OS / editor
+.DS_Store
+.idea
+.vscode
+nbproject
+.buildpath
+.project
+.settings
+Thumbs.db
+
+# Vagrant scaffold (not used by this app)
+/.vagrant

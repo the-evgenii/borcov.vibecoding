@@ -1,0 +1,13 @@
+{
+    admin off
+    auto_https off
+    storage file_system /opt/vibecoding-marketing/caddy/data
+}
+
+https://62.109.12.44:8443 {
+    tls /opt/vibecoding-marketing/caddy/certs/server.crt /opt/vibecoding-marketing/caddy/certs/server.key
+    root * /opt/vibecoding-marketing/app/web
+    encode gzip
+    php_fastcgi unix//opt/vibecoding-marketing/run/php-fpm.sock
+    file_server
+}
