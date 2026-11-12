@@ -33,9 +33,7 @@ final class Importer
             'average monthly searches',
             'monthly searches',
             'monthly volume',
-            'impressions',
             'searches',
-            'traffic',
         ],
         'language' => [
             'language',
@@ -364,20 +362,19 @@ final class Importer
         }
 
         $volumeRaw = is_scalar($raw['volume'] ?? null) ? (string) $raw['volume'] : '';
-        $volumeRaw = trim(str_replace([',', ' ', "\u{00A0}"], '', $volumeRaw));
-        if ($volumeRaw === '') {
-            $volume = 0;
-        } elseif (preg_match('/^\d+(?:\.\d+)?$/', $volumeRaw) !== 1) {
-            $errors[] = ['row' => $rowNumber, 'message' => 'Объём должен быть неотрицательным числом.'];
+        $volumeRaw = str_replace(',', '.', trim(str_replace([' ', "\u{00A0}"], '', $volumeRaw)));
+        if (preg_match('/^\d+(?:\.\d+)?$/', $volumeRaw) !== 1) {
+            $errors[] = ['row' => $rowNumber, 'message' => 'Частотность обязательна и должна быть неотрицательным числом. Дробная часть отделяется точкой или запятой.'];
 
             return null;
         } else {
-            $volume = (int) $volumeRaw;
-            if ($volume > 1_000_000_000) {
-                $errors[] = ['row' => $rowNumber, 'message' => 'Объём неразумно большой.'];
+            $rounded = ceil((float) $volumeRaw);
+            if ($rounded > 1_000_000_000) {
+                $errors[] = ['row' => $rowNumber, 'message' => 'Частотность неразумно большая.'];
 
                 return null;
             }
+            $volume = (int) $rounded;
         }
 
         $url = trim(is_scalar($raw['url'] ?? null) ? (string) $raw['url'] : '');
@@ -447,7 +444,7 @@ final class Importer
             throw new ImportException(
                 'Отсутствуют обязательные столбцы: ' . implode(', ', $missing) . '. '
                 . 'Принимаются заголовки keyword, query, top queries. '
-                . 'Алиасы объёма: volume, impressions, search volume. '
+                . 'Частотность: volume или search volume. Показы (impressions) и трафик не заменяют частотность. '
                 . 'Алиасы языка: language, lang, locale.',
             );
         }

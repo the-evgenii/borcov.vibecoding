@@ -123,6 +123,9 @@ final class AdsExportBuilder
      */
     private function collect(Campaign $campaign): array
     {
+        if ($campaign->isStale()) {
+            throw new ExportException('Кампания устарела: изменились данные или настройки. Сгенерируйте кампанию заново перед экспортом.');
+        }
         $groups = CampaignGroup::find()
             ->where(['campaign_id' => $campaign->id])
             ->with('ads')

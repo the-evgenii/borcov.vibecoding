@@ -121,12 +121,15 @@ The upload form selects the source; the file does not need to contain a source c
 Both **CSV** and **JSON** are accepted. Limits: **2 MB** and **5,000 data rows** per file. UTF-8 is required; a UTF-8 BOM is tolerated. CSV delimiters `,`, `;` and tab are auto-detected on the header row.
 
 Required fields: `keyword`, `volume`, `language`. Optional: `url`.
+`volume` means monthly search frequency, not impressions or traffic. Raw Search Console exports need enrichment with search-volume data; the bundled examples contain synthetic frequency values. Decimal values use a dot or comma and round upward (12.5 or 12,5 → 13). Use no separator or a space for thousands (1200 or 1 200). Empty frequency is rejected.
+
+Campaign exports are snapshots of the imported data and settings. Changing rules, target URLs or imports makes the previous snapshot stale: the preview explains this and CSV download is blocked until regeneration. Snapshots created before this check also require regeneration. Existing imported numbers are not retroactively reinterpreted.
 Header matching is case-insensitive and ignores spaces/punctuation. The first matching column wins.
 
 | Canonical field | Accepted aliases |
 | --- | --- |
 | `keyword` | `keyword`, `keywords`, `key word`, `query`, `search query`, `term`, `search term`, `phrase`, `top queries`, `top query` |
-| `volume` | `volume`, `search volume`, `avg monthly searches`, `average monthly searches`, `monthly searches`, `monthly volume`, `impressions`, `searches`, `traffic` |
+| `volume` | `volume`, `search volume`, `avg monthly searches`, `average monthly searches`, `monthly searches`, `monthly volume`, `searches` |
 | `language` | `language`, `lang`, `locale`, `language code`, `target language`, `language targeting` |
 | `url` | `url`, `final url`, `final urls`, `landing page`, `target url`, `page`, `link` |
 
@@ -139,7 +142,7 @@ JSON may be a top-level array of objects or an object with an `items`, `data`, `
   "items": [
     {
       "query": "website builder for restaurants",
-      "impressions": 320,
+      "search volume": 320,
       "language": "en_US",
       "landing_page": "https://site.pro/"
     }
@@ -147,7 +150,7 @@ JSON may be a top-level array of objects or an object with an `items`, `data`, `
 }
 ```
 
-Empty keyword or language values reject that row. A missing volume is accepted as `0` and will usually be filtered by volume. Invalid volume, invalid/relative URL, too many columns, invalid JSON and missing required columns produce explicit errors. Mixed files can import valid rows while reporting rejected rows in the batch audit.
+Empty keyword, language or frequency values reject that row. Invalid volume, invalid/relative URL, too many columns, invalid JSON and missing required columns produce explicit errors. Mixed files can import valid rows while reporting rejected rows in the batch audit.
 
 ## Cleaning and merge rules
 
@@ -241,7 +244,7 @@ composer test:e2e
 ./vendor/bin/phpunit --display-deprecations --display-warnings
 ```
 
-Current local result: **38 tests, 617 assertions, PHPUnit exit 0**, no deprecations or warnings. The suite covers:
+Current local result: **54 tests, 767 assertions, PHPUnit exit 0**, no deprecations or warnings. The suite covers:
 
 - CSV and JSON imports for all four sources, aliases, regional language codes, optional URLs, partial-row rejection, invalid JSON, missing columns, empty files, oversize files, empty fields and duplicate rows
 - Junk, brand, forbidden, low-volume, duplicate and cross-source “already used in Google Ads” rules, including recalculation after settings changes

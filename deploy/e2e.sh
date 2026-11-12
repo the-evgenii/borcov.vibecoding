@@ -107,7 +107,7 @@ e2e csv site.pro brand,90,en,https://site.pro/
 e2e csv casino spam,80,en,https://site.pro/
 EOF
 cat > "$OUT/e2e.json" <<'EOF'
-{"items":[{"query":"e2e json clean keyword","impressions":150,"language":"en_US","landing_page":"https://site.pro/"}]}
+{"items":[{"query":"e2e json clean keyword","search volume":150,"language":"en_US","landing_page":"https://site.pro/"}]}
 EOF
 printf '{"items": [' > "$OUT/invalid.json"
 cat > "$OUT/invalid.csv" <<'EOF'

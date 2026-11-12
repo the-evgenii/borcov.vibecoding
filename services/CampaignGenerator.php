@@ -24,6 +24,7 @@ final class CampaignGenerator
 
     public function generate(?int $userId = null): Campaign
     {
+        $sourceFingerprint = Campaign::sourceFingerprint();
         $setting = $this->settings->get();
         $targetUrls = $setting->getLanguageUrls();
         $audit = $this->auditor->run();
@@ -128,6 +129,7 @@ final class CampaignGenerator
         ksort($languages);
 
         $summary = [
+            'source_fingerprint' => $sourceFingerprint,
             'records_total' => $audit['summary']['records_total'],
             'included_records' => $audit['summary']['included_records'],
             'duplicate_records' => $audit['summary']['duplicate_records'],

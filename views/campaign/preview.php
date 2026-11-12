@@ -59,7 +59,7 @@ $formatUrl = static function (string $url): string {
         <?= Html::beginForm(['/campaign/generate'], 'post', ['class' => 'inline-form']) ?>
             <button type="submit" class="btn btn-secondary">Сгенерировать заново</button>
         <?= Html::endForm() ?>
-        <?php if ($campaign !== null): ?>
+        <?php if ($campaign !== null && !empty($validation['ok'])): ?>
             <?= Html::a('Скачать CSV', ['/campaign/export'], ['class' => 'btn btn-primary']) ?>
         <?php endif; ?>
     </div>
@@ -107,7 +107,7 @@ $formatUrl = static function (string $url): string {
                     объявлений: <?= (int) ($validation['ads'] ?? 0) ?>.</p>
                 <p class="hint">Структура, лимиты и http(s)-URL проверены локально. Перед публикацией просмотрите изменения в Google Ads Editor.</p>
             <?php else: ?>
-                <p><strong>Проверка структуры экспорта не пройдена.</strong></p>
+                <p><strong>Экспорт недоступен.</strong></p>
                 <ul class="error-list">
                     <?php foreach (($validation['errors'] ?? []) as $error): ?>
                         <li><?= Html::encode((string) $error) ?></li>
@@ -269,7 +269,9 @@ $formatUrl = static function (string $url): string {
         <h2>Перед публикацией</h2>
         <p>Этот проект не создаёт кампании в Google Ads. Скачайте UTF-8 CSV, откройте Google Ads Editor, выберите «Аккаунт → Импорт → Из файла» (в англоязычном Editor — Account → Import → From file), проверьте предложенные изменения и опубликуйте их. Тексты объявлений шаблонные и требуют проверки человеком.</p>
         <div class="button-row">
-            <?= Html::a('Скачать CSV для Editor', ['/campaign/export'], ['class' => 'btn btn-primary']) ?>
+            <?php if (!empty($validation['ok'])): ?>
+                <?= Html::a('Скачать CSV для Editor', ['/campaign/export'], ['class' => 'btn btn-primary']) ?>
+            <?php endif; ?>
             <?= Html::a('Посмотреть исходные ключевые слова', ['/keyword/index'], ['class' => 'btn btn-secondary']) ?>
         </div>
     </section>

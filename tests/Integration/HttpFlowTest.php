@@ -272,6 +272,37 @@ final class HttpFlowTest extends TestCase
         self::assertStringNotContainsString('PHP Warning', $log);
     }
 
+    public function testStaleCampaignCannotBeDownloadedUntilRegenerated(): void
+    {
+        Seed::csv(KeywordSource::SEARCH_CONSOLE, [['website builder', 100, 'en']]);
+        [$process, $port] = $this->startServer();
+        $this->_baseUrl = 'http://127.0.0.1:' . $port;
+        try {
+            $http = new HttpClient($this->_baseUrl, $this->_cookieJar);
+            $this->login($http);
+            $csrf = $http->csrf($http->get('/settings')->body);
+            self::assertSame(302, $http->post('/campaigns/generate', ['_csrf' => $csrf])->status);
+            self::assertSame(200, $http->get('/campaigns/export')->status);
+
+            $fields = $this->settingsFields($csrf);
+            $fields['SettingsForm[minVolume]'] = '70';
+            self::assertSame(302, $http->post('/settings', $fields)->status);
+            $preview = $http->get('/campaigns/preview');
+            self::assertSame(200, $preview->status);
+            self::assertStringContainsString('Кампания устарела', $preview->body);
+            self::assertStringNotContainsString('>Скачать CSV</a>', $preview->body);
+            self::assertStringNotContainsString('>Скачать CSV для Editor</a>', $preview->body);
+            self::assertSame(302, $http->get('/campaigns/export')->status);
+            self::assertStringContainsString('Кампания устарела', $http->get('/campaigns/preview')->body);
+
+            self::assertSame(302, $http->post('/campaigns/generate', ['_csrf' => $csrf])->status);
+            self::assertSame(200, $http->get('/campaigns/export')->status);
+            self::assertStringNotContainsString('Кампания устарела', $http->get('/campaigns/preview')->body);
+        } finally {
+            $this->stopServer($process);
+        }
+    }
+
     public function testSettingsRejectsIncompleteMalformedAndNestedInput(): void
     {
         TestDb::settings(['site.pro'], ['casino'], 50);

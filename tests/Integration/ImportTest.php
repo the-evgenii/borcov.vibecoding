@@ -59,7 +59,7 @@ final class ImportTest extends TestCase
             'items' => [
                 [
                     'query' => 'json alias keyword',
-                    'impressions' => '1,200',
+                    'search volume' => '1 200',
                     'language' => 'en_US',
                     'landing_page' => 'https://site.pro/',
                 ],
@@ -80,7 +80,7 @@ final class ImportTest extends TestCase
 
     public function testSearchConsoleCsvAliasesAreAccepted(): void
     {
-        $csv = "Top queries,Impressions,Language,Landing page\n"
+        $csv = "Top queries,Search volume,Language,Landing page\n"
             . "console alias keyword,1234,de_DE,https://site.pro/de/\n";
 
         $import = Seed::raw(KeywordSource::SEARCH_CONSOLE, 'console.csv', $csv);

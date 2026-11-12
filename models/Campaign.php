@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace app\models;
 
+use app\services\SettingsService;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\Json;
@@ -48,6 +49,24 @@ class Campaign extends ActiveRecord
     public static function latest(): ?self
     {
         return static::find()->orderBy(['id' => SORT_DESC])->one();
+    }
+
+    public static function sourceFingerprint(): string
+    {
+        $settings = (new SettingsService())->get();
+
+        return hash('sha256', Json::encode([
+            'imports' => Import::find()->select('id')->orderBy(['id' => SORT_ASC])->column(),
+            'brands' => $settings->getBrands(),
+            'forbidden' => $settings->getForbidden(),
+            'min_volume' => (int) $settings->min_volume,
+            'urls' => $settings->getLanguageUrls(),
+        ]));
+    }
+
+    public function isStale(): bool
+    {
+        return ($this->getSummary()['source_fingerprint'] ?? null) !== self::sourceFingerprint();
     }
 
     public function beforeSave($insert): bool

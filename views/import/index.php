@@ -90,7 +90,9 @@ $this->params['pageTitle'] = 'Импорт';
 
             <div class="form-note">
                 <p><code>keyword</code>, <code>volume</code> и <code>language</code> обязательны. <code>url</code> можно не указывать; если указан — только <code>http</code> или <code>https</code>.</p>
-                <p>Принимаются алиасы <code>query</code>, <code>top queries</code>, <code>impressions</code>, <code>search volume</code>, <code>final URL</code>, <code>lang</code> и <code>locale</code>. Заголовки сопоставляются без учёта регистра и пунктуации.</p>
+                <p>Принимаются алиасы <code>query</code>, <code>top queries</code>, <code>search volume</code>, <code>final URL</code>, <code>lang</code> и <code>locale</code>. Заголовки сопоставляются без учёта регистра и пунктуации.</p>
+                <p>Частотность — запросов в месяц, а не показы или трафик. Если выгрузка содержит только <code>impressions</code> или <code>traffic</code>, добавьте <code>volume</code> с частотностью из отдельного источника. В примерах частотность синтетическая.</p>
+                <p>Дробная частотность округляется вверх: 12,5 → 13. Точка и запятая — десятичные разделители; тысячи записывайте без разделителя или с пробелом: 1200 или 1 200.</p>
                 <p>JSON может быть массивом объектов или объектом с массивом <code>items</code>, <code>data</code>, <code>keywords</code> или <code>records</code>. Файл должен быть в UTF-8.</p>
             </div>
         </div>
